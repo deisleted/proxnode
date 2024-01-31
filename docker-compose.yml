@@ -1,0 +1,43 @@
+version: '3'
+
+services:
+  node:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    restart: always
+    tty: true
+    depends_on:
+      - db
+    networks:
+      - api
+
+  db:
+    build:
+      context: ./db
+    environment:
+      MYSQL_ROOT_PASSWORD: fullcyclepassword
+    restart: always
+    ports:
+      - 3306:3306
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+    networks:
+      - api
+
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    depends_on:
+      - node
+      - db
+    networks:
+      - api
+      
+networks:
+  api: {}
