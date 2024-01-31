@@ -13,13 +13,20 @@ app.get("/", async (req, res) => {
   });
 
   try {
+    await Promise.all([
+      connection.query("INSERT INTO people (name) VALUES (?)", [
+        "Ana Catarina",
+      ]),
+      connection.query("INSERT INTO people (name) VALUES (?)", ["João Pedro"]),
+      connection.query("INSERT INTO people (name) VALUES (?)", ["Maria Flor"]),
+    ]);
+
     const [results] = await connection.query("SELECT * FROM people");
 
     const tableRows = results.map((row) => {
       return `<tr><td>${row.id}</td><td>${row.name}</td></tr>`;
     });
 
-    // Create the HTML table
     const htmlTable =
       `<h1>Full Cycle Rocks!</h1><p>List of names in the database:</p>` +
       `<table border="1"><tr><th>ID</th><th>Name</th></tr>${tableRows.join(
