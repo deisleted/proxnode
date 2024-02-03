@@ -14,7 +14,7 @@ Neste desafio, você irá aplicar os conceitos de utilização do Nginx como pro
 ### 1. Para executar a aplicação execute o seguinte comando:
 
 ```bash
-docker-compose up -d 
+docker-compose up
 
 ```
 
